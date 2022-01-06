@@ -52,7 +52,7 @@ public class Ball extends CollisionObject {
 	public void draw(Graphics g) {
 		
 		g.setColor(color);
-		g.drawOval(posX, posY, width, width);
+		g.fillOval(posX, posY, width, width);
 		
 	}
 	

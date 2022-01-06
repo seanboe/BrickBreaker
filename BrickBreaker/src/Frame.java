@@ -21,30 +21,44 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	final int SCREEN_HEIGHT = 800;
 	
 	ArrayList<Brick> bricks = new ArrayList<Brick>();
+//	Brick brick = new Brick(100, 100, 100, 100, Color.red); 
 	
 	
 //	Brick brick = new Brick(100, 100, 100, 100, Color.red);
-	Ball ball = new Ball(250, 400, 10, Color.black, 3);
+	Ball ball = new Ball(250, 400, 10, Color.black, 2);
 	
 	public void paint(Graphics g) {
 		super.paintComponent(g);
 		
 		boolean hit = false;
 		
-		for (Brick brick : bricks) {
-			
+		for (int x = bricks.size() - 1; x >= 0; x--) {
+			Brick brick = bricks.get(x);
+			switch (brick.checkCollision(ball)) {
+				case RIGHT: 
+					ball.flipVelX();
+					bricks.remove(x);
+					break;
+				case LEFT:
+					ball.flipVelX();
+					bricks.remove(x);
+					break;
+				case BOTTOM: 
+					ball.flipVelY();
+					bricks.remove(x);
+					break;
+				case TOP: 
+					ball.flipVelY();
+					bricks.remove(x);
+					break;
+				default: break;
+			}
 		}
 		
 		
+		for (Brick brick : bricks) 
+			brick.draw(g);
 		
-		switch (bricks.get(0).checkCollision(ball)) {
-			case RIGHT: ball.flipVelX(); 			hit = true;
-			case LEFT: ball.flipVelX(); 			hit = true;
-			case BOTTOM: ball.flipVelY(); 			hit = true;
-			case TOP: ball.flipVelY(); 			hit = true;
-		}
-			if (hit.)
-				brick.draw(g);
 		ball.updatePosition(SCREEN_WIDTH, SCREEN_HEIGHT);
 		ball.draw(g);
 	}
@@ -66,7 +80,12 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		t.start();
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
-		bricks.add(new Brick(100, 100, 100, 100, Color.red));
+		bricks.add(new Brick(0, 0, 50, 50, Color.red));
+		bricks.add(new Brick(100, 100, 50, 50, Color.red));
+		bricks.add(new Brick(100, 200, 50, 50, Color.red));
+		bricks.add(new Brick(100, 300, 50, 50, Color.red));
+		bricks.add(new Brick(150, 400, 50, 50, Color.red));
+		bricks.add(new Brick(300, 100, 50, 50, Color.red));
 
 	}
 	
