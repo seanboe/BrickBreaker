@@ -25,10 +25,12 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	
 	
 //	Brick brick = new Brick(100, 100, 100, 100, Color.red);
-	Ball ball = new Ball(250, 400, 10, Color.black, 2);
+	Ball ball = new Ball("imgs/ball.png", 250, 400, 16, 5);
 	
 	public void paint(Graphics g) {
 		super.paintComponent(g);
+		g.setColor(new Color(41, 46, 55));
+		g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 		
 		boolean hit = false;
 		
@@ -80,12 +82,13 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		t.start();
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
-		bricks.add(new Brick(0, 0, 50, 50, Color.red));
-		bricks.add(new Brick(100, 100, 50, 50, Color.red));
-		bricks.add(new Brick(100, 200, 50, 50, Color.red));
-		bricks.add(new Brick(100, 300, 50, 50, Color.red));
-		bricks.add(new Brick(150, 400, 50, 50, Color.red));
-		bricks.add(new Brick(300, 100, 50, 50, Color.red));
+		bricks.add(new Brick("/imgs/greenBrick.png", 30, 40, 52, 26));
+		bricks.add(new Brick("/imgs/redBrick.png", 300, 400, 52, 26));
+		bricks.add(new Brick("/imgs/yellowBrick.png", 20, 50, 52, 26));
+		bricks.add(new Brick("/imgs/greenBrick.png", 550, 70, 52, 26));
+		bricks.add(new Brick("/imgs/RedBrick.png", 110, 0, 52, 26));
+		bricks.add(new Brick("/imgs/yellowBrick.png", 430, 650, 52, 26));
+		bricks.add(new Brick("/imgs/RedBrick.png", 30, 580, 52, 26));
 
 	}
 	
