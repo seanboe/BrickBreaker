@@ -19,12 +19,12 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	
 	final int SCREEN_WIDTH = 500;
 	final int SCREEN_HEIGHT = 800;
+
+	final int BRICK_WIDTH = 52;
+	final int BRICK_HEIGHT = 26;
 	
 	ArrayList<Brick> bricks = new ArrayList<Brick>();
-//	Brick brick = new Brick(100, 100, 100, 100, Color.red); 
-	
-	
-//	Brick brick = new Brick(100, 100, 100, 100, Color.red);
+
 	Ball ball = new Ball("imgs/ball.png", 250, 400, 16, 5);
 	
 	public void paint(Graphics g) {
@@ -82,16 +82,26 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		t.start();
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
-		bricks.add(new Brick("/imgs/greenBrick.png", 30, 40, 52, 26));
-		bricks.add(new Brick("/imgs/redBrick.png", 300, 400, 52, 26));
-		bricks.add(new Brick("/imgs/yellowBrick.png", 20, 50, 52, 26));
-		bricks.add(new Brick("/imgs/greenBrick.png", 550, 70, 52, 26));
-		bricks.add(new Brick("/imgs/RedBrick.png", 110, 0, 52, 26));
-		bricks.add(new Brick("/imgs/yellowBrick.png", 430, 650, 52, 26));
-		bricks.add(new Brick("/imgs/RedBrick.png", 30, 580, 52, 26));
+		bricks.add(new Brick("/imgs/greenBrick.png", 30, 40, BRICK_WIDTH, BRICK_HEIGHT));
+		bricks.add(new Brick("/imgs/redBrick.png", 300, 400, BRICK_WIDTH, BRICK_HEIGHT));
+		bricks.add(new Brick("/imgs/yellowBrick.png", 20, 50, BRICK_WIDTH, BRICK_HEIGHT));
+		bricks.add(new Brick("/imgs/greenBrick.png", 550, 70, BRICK_WIDTH, BRICK_HEIGHT));
+		bricks.add(new Brick("/imgs/RedBrick.png", 110, 0, BRICK_WIDTH, BRICK_HEIGHT));
+		bricks.add(new Brick("/imgs/yellowBrick.png", 430, 650, BRICK_WIDTH, BRICK_HEIGHT));
+		bricks.add(new Brick("/imgs/RedBrick.png", 30, 580, BRICK_WIDTH, BRICK_HEIGHT));
 
 	}
 	
+	
+	public void buildBrickFormat() {
+		BrickFormats formats = new BrickFormats();
+		String[][] format = formats.getLevelFormat(1);
+		
+		for (int x = 0; x < format.length; x++) {
+			int startX = (SCREEN_WIDTH / 2) - ((format[x].length * BRICK_WIDTH) / 2);
+			int startY = ((SCREEN_HEIGHT / 2) - ((format.length * BRICK_HEIGHT) / 2)) + (x * BRICK_HEIGHT);
+		}
+	}
 	
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
