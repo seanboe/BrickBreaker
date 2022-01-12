@@ -20,12 +20,12 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	final int SCREEN_WIDTH = 500;
 	final int SCREEN_HEIGHT = 800;
 
-	final int BRICK_WIDTH = 52;
-	final int BRICK_HEIGHT = 26;
+	final int BRICK_WIDTH = 46;
+	final int BRICK_HEIGHT = 24;
 	
 	ArrayList<Brick> bricks = new ArrayList<Brick>();
 
-	Ball ball = new Ball("imgs/ball.png", 250, 400, 16, 5);
+	Ball ball = new Ball("imgs/ball.png", 250, 600, 11, 1);
 	
 	public void paint(Graphics g) {
 		super.paintComponent(g);
@@ -82,13 +82,14 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		t.start();
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
-		bricks.add(new Brick("/imgs/greenBrick.png", 30, 40, BRICK_WIDTH, BRICK_HEIGHT));
-		bricks.add(new Brick("/imgs/redBrick.png", 300, 400, BRICK_WIDTH, BRICK_HEIGHT));
-		bricks.add(new Brick("/imgs/yellowBrick.png", 20, 50, BRICK_WIDTH, BRICK_HEIGHT));
-		bricks.add(new Brick("/imgs/greenBrick.png", 550, 70, BRICK_WIDTH, BRICK_HEIGHT));
-		bricks.add(new Brick("/imgs/RedBrick.png", 110, 0, BRICK_WIDTH, BRICK_HEIGHT));
-		bricks.add(new Brick("/imgs/yellowBrick.png", 430, 650, BRICK_WIDTH, BRICK_HEIGHT));
-		bricks.add(new Brick("/imgs/RedBrick.png", 30, 580, BRICK_WIDTH, BRICK_HEIGHT));
+		buildBrickFormat();
+//		bricks.add(new Brick("/imgs/greenBrick.png", 30, 40, BRICK_WIDTH, BRICK_HEIGHT));
+//		bricks.add(new Brick("/imgs/redBrick.png", 300, 400, BRICK_WIDTH, BRICK_HEIGHT));
+//		bricks.add(new Brick("/imgs/yellowBrick.png", 20, 50, BRICK_WIDTH, BRICK_HEIGHT));
+//		bricks.add(new Brick("/imgs/greenBrick.png", 550, 70, BRICK_WIDTH, BRICK_HEIGHT));
+//		bricks.add(new Brick("/imgs/RedBrick.png", 110, 0, BRICK_WIDTH, BRICK_HEIGHT));
+//		bricks.add(new Brick("/imgs/yellowBrick.png", 430, 650, BRICK_WIDTH, BRICK_HEIGHT));
+//		bricks.add(new Brick("/imgs/RedBrick.png", 30, 580, BRICK_WIDTH, BRICK_HEIGHT));
 
 	}
 	
@@ -99,7 +100,20 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		
 		for (int x = 0; x < format.length; x++) {
 			int startX = (SCREEN_WIDTH / 2) - ((format[x].length * BRICK_WIDTH) / 2);
-			int startY = ((SCREEN_HEIGHT / 2) - ((format.length * BRICK_HEIGHT) / 2)) + (x * BRICK_HEIGHT);
+			int startY = ((SCREEN_HEIGHT / 2) - ((format.length * BRICK_HEIGHT) / 2));
+			
+			for (int a = 0; a < format[x].length; a++) {
+				String imagePath = "";
+				switch (format[x][a]) {
+					case "r": imagePath = "/imgs/redBrick.png"; break;
+					case "g": imagePath = "/imgs/greenBrick.png"; break;
+					case "y": imagePath = "/imgs/yellowBrick.png"; break;
+				}
+				int posX = startX + a * BRICK_WIDTH;
+				int posY = startY + x * BRICK_HEIGHT;
+				
+				bricks.add(new Brick(imagePath, posX, posY, BRICK_WIDTH, BRICK_HEIGHT));
+			}
 		}
 	}
 	
