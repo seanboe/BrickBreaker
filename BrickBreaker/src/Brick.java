@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 //import javafx.scene.layout.Stackpane; 
 //import javafx.scene.effect.InnerShadow;
 import java.awt.Toolkit;

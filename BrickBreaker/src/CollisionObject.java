@@ -1,3 +1,5 @@
+import java.awt.Rectangle;
+import java.awt.Shape;
 
 public class CollisionObject {
 
@@ -5,7 +7,7 @@ public class CollisionObject {
 	protected int posY;
 	protected int width;
 	protected int height;
-	
+		
 	protected boolean isActive;
 	
 	enum Side {
@@ -18,82 +20,29 @@ public class CollisionObject {
 		this.posY = posY;
 		this.width = width;
 		this.height = height;
+				
 		this.isActive = true;
 	}
 	
 	public Side checkCollision (CollisionObject collider) {
 		
-		int colliderCenterX = collider.posX + (int)(collider.width / 2);
-		int colliderCenterY = collider.posY + (int)(collider.height / 2);
-		
-		int thisCenterX = this.posX + (this.width / 2);
-		int thisCenterY = this.posY + (this.height / 2);
-
-		
-		// Check collisions
-		if (colliderCenterX > this.posX && colliderCenterX < (this.posX + this.width)) {
-			if ((collider.posY >= this.posY) && (collider.posY <= this.posY + this.height)) {
+		Rectangle thisHitbox = new Rectangle(this.posX, this.posY, width, height);
+		Rectangle colliderHitbox = new Rectangle(collider.posX, collider.posY, collider.width, collider.height);
 				
-				System.out.println("Collision");
-				
-				int dyTop = Math.abs(this.posY - colliderCenterY);
-				int dyBottom = Math.abs(this.posY + this.height - colliderCenterY);
-				int dxLeft = Math.abs(colliderCenterX - this.posX);
-				int dxRight = Math.abs(colliderCenterX - this.posX + this.width);
-				
-				if (dyTop < dyBottom && dxLeft < dxRight) {
-					// Top left quadrant
-					if (Math.sin(Math.abs(colliderCenterY - thisCenterY) / Math.abs(colliderCenterX - thisCenterX)) > Math.cos(Math.abs(colliderCenterY - thisCenterY) / Math.abs(colliderCenterX - thisCenterX)))
-						return Side.TOP;
-					else 
-						return Side.LEFT;
-				}
-				
-				if (dyTop > dyBottom && dxLeft < dxRight) {
-					// Bottom left quadrant
-					if (Math.sin(Math.abs(colliderCenterY - thisCenterY) / Math.abs(colliderCenterX - thisCenterX)) > Math.cos(Math.abs(colliderCenterY - thisCenterY) / Math.abs(colliderCenterX - thisCenterX)))
-						return Side.BOTTOM;
-					else 
-						return Side.LEFT;
-				}
-				
-				if (dyTop > dyBottom && dxLeft > dxRight) {
-					// Top right quadrant
-					if (Math.sin(Math.abs(colliderCenterY - thisCenterY) / Math.abs(colliderCenterX - thisCenterX)) > Math.cos(Math.abs(colliderCenterY - thisCenterY) / Math.abs(colliderCenterX - thisCenterX)))
-						return Side.BOTTOM;
-					else 
-						return Side.RIGHT;
-				}
-				
-				if (dyTop < dyBottom && dxLeft > dxRight) {
-					// Top right quadrant
-					if (Math.sin(Math.abs(colliderCenterY - thisCenterY) / Math.abs(colliderCenterX - thisCenterX)) > Math.cos(Math.abs(colliderCenterY - thisCenterY) / Math.abs(colliderCenterX - thisCenterX)))
-						return Side.TOP;
-					else 
-						return Side.RIGHT;
-				}
-				
-//				if (collider.posY < this.posY) {
-//					System.out.println("Top");
-//					return Side.TOP;
-//				}
-//				if (collider.posY + collider.height > this.posY + this.height) {
-//					System.out.println("Bottom");
-//					return Side.BOTTOM;
-//				}
-//
-//				if (collider.posX + collider.width > this.posX + width) {
-//					System.out.println("Right");
-//					return Side.RIGHT;
-//				}
-//
-//				if (collider.posX < this.posX) {
-//					System.out.println("Left");
-//					return Side.LEFT;
-//				}
-				
+		if (thisHitbox.intersects(colliderHitbox)) {
+			if (colliderHitbox.getCenterX() < this.posX + this.width && colliderHitbox.getCenterX() > this.posX)  {
+				if (colliderHitbox.getCenterY() < this.posY)
+					return Side.TOP;
+				if (colliderHitbox.getCenterY() > this.posY)
+					return Side.BOTTOM;
 			}
-								
+			
+			if (colliderHitbox.getCenterY() > this.posY && colliderHitbox.getCenterY() < this.posY + this.height) {
+				if (colliderHitbox.getCenterX() < this.posX)
+					return Side.LEFT;
+				if (colliderHitbox.getCenterX() > this.posX + this.width)
+					return Side.RIGHT;
+			}
 		}
 		
 		return Side.NONE;

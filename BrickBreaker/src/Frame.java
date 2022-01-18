@@ -25,7 +25,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	
 	ArrayList<Brick> bricks = new ArrayList<Brick>();
 
-	Ball ball = new Ball("imgs/ball.png", 250, 600, 11, 1);
+	Ball ball = new Ball("imgs/ball.png", 250, 600, 18, 5);
 	
 	public void paint(Graphics g) {
 		super.paintComponent(g);

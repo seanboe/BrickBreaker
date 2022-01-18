@@ -60,7 +60,7 @@ public class Ball extends CollisionObject {
 		
 		AffineTransform tx = AffineTransform.getTranslateInstance(0, 0);
 		tx.setToTranslation(posX, posY);
-		tx.scale(.05, .05);
+		tx.scale(.08, .08);
 		Graphics2D g2 = (Graphics2D) g;
 		g2.drawImage(image, tx, null);
 		
