@@ -13,10 +13,12 @@ import java.net.URL;
 public class Brick extends CollisionObject {
 	
 	private Image image;
+	private int health;
 	
-	public Brick(String img, int posX, int posY, int width, int height) {
+	public Brick(String img, int posX, int posY, int width, int height, int health) {
 		super(posX, posY, width, height);
 		this.image = getImage(img);
+		this.health = health;
 	}
 	
 	public void draw(Graphics g) {
@@ -27,8 +29,14 @@ public class Brick extends CollisionObject {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.drawImage(image, tx, null);
 				
-//		g.setColor(color);
-//		g.fillRect(this.posX, this.posY, this.width, this.height);
+	}
+	
+	public boolean isDestroyed() {
+		this.health -= 1;
+		System.out.println(health);
+		if (this.health > 0) 
+			return false;
+		return true;
 	}
 	
 	private Image getImage(String path) {

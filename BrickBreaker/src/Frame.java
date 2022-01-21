@@ -26,6 +26,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	ArrayList<Brick> bricks = new ArrayList<Brick>();
 
 	Ball ball = new Ball("imgs/ball.png", 250, 600, 18, 5);
+	Paddle paddle = new Paddle("imgs/paddle.png", SCREEN_WIDTH / 2 - 52, 600, 94, 22, 8);
 	
 	public void paint(Graphics g) {
 		super.paintComponent(g);
@@ -39,19 +40,19 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			switch (brick.checkCollision(ball)) {
 				case RIGHT: 
 					ball.flipVelX();
-					bricks.remove(x);
+					if (brick.isDestroyed()) bricks.remove(x);
 					break;
 				case LEFT:
 					ball.flipVelX();
-					bricks.remove(x);
+					if (brick.isDestroyed()) bricks.remove(x);				
 					break;
 				case BOTTOM: 
 					ball.flipVelY();
-					bricks.remove(x);
+					if (brick.isDestroyed()) bricks.remove(x);					
 					break;
 				case TOP: 
 					ball.flipVelY();
-					bricks.remove(x);
+					if (brick.isDestroyed()) bricks.remove(x);					
 					break;
 				default: break;
 			}
@@ -61,8 +62,18 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		for (Brick brick : bricks) 
 			brick.draw(g);
 		
+		paddle.updatePosition(SCREEN_WIDTH, SCREEN_HEIGHT);
+		if (paddle.checkCollision(ball) != CollisionObject.Side.NONE) {
+			ball.flipVelY();
+			// maybe flip the x direction too
+			if (Math.random() > 0.5)
+				ball.flipVelX();
+		}
+		paddle.draw(g);
+		
 		ball.updatePosition(SCREEN_WIDTH, SCREEN_HEIGHT);
 		ball.draw(g);
+		
 	}
 	
 	public static void main(String[] arg) {
@@ -83,13 +94,6 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
 		buildBrickFormat();
-//		bricks.add(new Brick("/imgs/greenBrick.png", 30, 40, BRICK_WIDTH, BRICK_HEIGHT));
-//		bricks.add(new Brick("/imgs/redBrick.png", 300, 400, BRICK_WIDTH, BRICK_HEIGHT));
-//		bricks.add(new Brick("/imgs/yellowBrick.png", 20, 50, BRICK_WIDTH, BRICK_HEIGHT));
-//		bricks.add(new Brick("/imgs/greenBrick.png", 550, 70, BRICK_WIDTH, BRICK_HEIGHT));
-//		bricks.add(new Brick("/imgs/RedBrick.png", 110, 0, BRICK_WIDTH, BRICK_HEIGHT));
-//		bricks.add(new Brick("/imgs/yellowBrick.png", 430, 650, BRICK_WIDTH, BRICK_HEIGHT));
-//		bricks.add(new Brick("/imgs/RedBrick.png", 30, 580, BRICK_WIDTH, BRICK_HEIGHT));
 
 	}
 	
@@ -100,19 +104,20 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		
 		for (int x = 0; x < format.length; x++) {
 			int startX = (SCREEN_WIDTH / 2) - ((format[x].length * BRICK_WIDTH) / 2);
-			int startY = ((SCREEN_HEIGHT / 2) - ((format.length * BRICK_HEIGHT) / 2));
+			int startY = ((SCREEN_HEIGHT / 3) - ((format.length * BRICK_HEIGHT) / 2));
 			
 			for (int a = 0; a < format[x].length; a++) {
 				String imagePath = "";
+				int health = 0;
 				switch (format[x][a]) {
-					case "r": imagePath = "/imgs/redBrick.png"; break;
-					case "g": imagePath = "/imgs/greenBrick.png"; break;
-					case "y": imagePath = "/imgs/yellowBrick.png"; break;
+					case "r": imagePath = "/imgs/redBrick.png"; health = 2; break;
+					case "g": imagePath = "/imgs/greenBrick.png"; health = 1; break;
+					case "y": imagePath = "/imgs/yellowBrick.png"; health = 1; break;
 				}
 				int posX = startX + a * BRICK_WIDTH;
 				int posY = startY + x * BRICK_HEIGHT;
 				
-				bricks.add(new Brick(imagePath, posX, posY, BRICK_WIDTH, BRICK_HEIGHT));
+				bricks.add(new Brick(imagePath, posX, posY, BRICK_WIDTH, BRICK_HEIGHT, health));
 			}
 		}
 	}
@@ -156,19 +161,29 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		System.out.println(arg0.getKeyCode());
+		
+		
+		
+		
+		int keyCode = arg0.getKeyCode();
+
+		if (keyCode == 37)
+			paddle.setMoveDirection(Paddle.Direction.LEFT);
+		else if (keyCode == 39) 
+			paddle.setMoveDirection(Paddle.Direction.RIGHT);
+		else
+			paddle.setMoveDirection(Paddle.Direction.STOP);
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
+		paddle.setMoveDirection(Paddle.Direction.STOP);
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
 	}
 
 }

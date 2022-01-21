@@ -9,6 +9,7 @@ public class BrickFormats {
 		{"r", "g", "y", "g", "r"} 
 	};
 	
+	
 	private ArrayList<String> level1;
 	
 	
