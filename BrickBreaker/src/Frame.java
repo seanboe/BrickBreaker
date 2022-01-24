@@ -66,8 +66,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		if (paddle.checkCollision(ball) != CollisionObject.Side.NONE) {
 			ball.flipVelY();
 			// maybe flip the x direction too
-			if (Math.random() > 0.5)
-				ball.flipVelX();
+//			if ()
 		}
 		paddle.draw(g);
 		
@@ -110,7 +109,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 				String imagePath = "";
 				int health = 0;
 				switch (format[x][a]) {
-					case "r": imagePath = "/imgs/redBrick.png"; health = 2; break;
+					case "r": imagePath = "/imgs/redBrick.png"; health = 1; break;
 					case "g": imagePath = "/imgs/greenBrick.png"; health = 1; break;
 					case "y": imagePath = "/imgs/yellowBrick.png"; health = 1; break;
 				}

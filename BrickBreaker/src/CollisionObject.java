@@ -14,6 +14,10 @@ public class CollisionObject {
 		TOP, BOTTOM, LEFT, RIGHT, NONE;
 	}
 	
+	enum Direction {
+		LEFT, RIGHT, STOP;
+	}
+	
 	
 	public CollisionObject(int posX, int posY, int width, int height) {
 		this.posX = posX;

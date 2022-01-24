@@ -7,9 +7,6 @@ import java.net.URL;
 
 public class Paddle extends CollisionObject {
 	
-	enum Direction {
-		LEFT, RIGHT, STOP;
-	}
 
 	private Direction movementDirection;
 	private int velocity;
