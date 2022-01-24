@@ -41,6 +41,10 @@ public class Paddle extends CollisionObject {
 		movementDirection = direction;
 	}
 	
+	public Direction getMoveDirection() {
+		return movementDirection;
+	}
+	
 	public void draw(Graphics g) {
 		
 		AffineTransform tx = AffineTransform.getTranslateInstance(0, 0);
@@ -60,6 +64,10 @@ public class Paddle extends CollisionObject {
 			e.printStackTrace();
 		}
 		return tempImage;
+	}
+	
+	public double getVelocityX() {
+		return velocity * (movementDirection == Direction.LEFT ? -1 : 1);
 	}
 	
 }

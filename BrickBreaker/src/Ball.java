@@ -11,19 +11,15 @@ public class Ball extends CollisionObject {
 	private double velocityY;
 	private double velocityX;
 	private Image image;
-	
-	private Direction movementDirection;
-	
+		
 	public Ball(String img, int posX, int posY, int width, double speed) {
 		super(posX, posY, width, width);
 		this.image = getImage(img);
 		
 		this.velocityY = -speed;
-		this.velocityX = speed * (Math.random() > 0.5 ? -1 : 1);
-//		velocityX = 0;
-		
-		refreshDirection();
-		
+//		this.velocityX = speed * (Math.random() > 0.5 ? -1 : 1);
+		this.velocityX = 0;
+				
 	}
 	
 	public void updatePosition(int frameWidth, int frameHeight) {
@@ -35,9 +31,7 @@ public class Ball extends CollisionObject {
 			case LEFT: velocityX = Math.abs(velocityX); break;
 			case NONE: break;
 		}
-		
-		refreshDirection();
-		
+				
 		posX += velocityX;
 		posY += velocityY;
 	}
@@ -61,15 +55,14 @@ public class Ball extends CollisionObject {
 		
 		else return Side.NONE;
 	}
-	
-	private void refreshDirection() {
-		if (velocityX > 0)
-			this.movementDirection = Direction.RIGHT;
-		else if (velocityX < 0)
-			this.movementDirection = Direction.LEFT;
-	}
 		
-//	private void 
+	public void setVelX(double paddleVelX) {
+		velocityX = (paddleVelX) * (paddleVelX < 0 ? -1 : 1);
+	}
+	
+	public double getVelX() {
+		return velocityX;
+	}
 	
 	public void draw(Graphics g) {
 		
@@ -91,7 +84,6 @@ public class Ball extends CollisionObject {
 		}
 		return tempImage;
 	}
-
 	
 	
 	public void flipVelX() {

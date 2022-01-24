@@ -4,9 +4,9 @@ public class BrickFormats {
 
 	
 	private String[][] level1Format = new String[][] {
-		{"r", "r", "r", "r", "r"},
-		{"r", "g", "g", "g", "r"},
-		{"r", "g", "y", "g", "r"} 
+		{"r", "r", "r", "r", "r", "r", "r"},
+		{"r", "r", "g", "g", "g", "r", "r"},
+		{"r", "r", "g", "y", "g", "r", "r"} 
 	};
 	
 	

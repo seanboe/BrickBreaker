@@ -25,7 +25,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	
 	ArrayList<Brick> bricks = new ArrayList<Brick>();
 
-	Ball ball = new Ball("imgs/ball.png", 250, 600, 18, 5);
+	Ball ball = new Ball("imgs/ball.png", 250, 550, 18, 7);
 	Paddle paddle = new Paddle("imgs/paddle.png", SCREEN_WIDTH / 2 - 52, 600, 94, 22, 8);
 	
 	public void paint(Graphics g) {
@@ -65,9 +65,22 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		paddle.updatePosition(SCREEN_WIDTH, SCREEN_HEIGHT);
 		if (paddle.checkCollision(ball) != CollisionObject.Side.NONE) {
 			ball.flipVelY();
-			// maybe flip the x direction too
-//			if ()
+
+			System.out.println(ball.getVelX());
+			if (paddle.getMoveDirection() == CollisionObject.Direction.LEFT) {
+				double newVelocity = ball.getVelX() - paddle.getVelocityX() * 0.25;
+				if (Math.abs(newVelocity) > Math.abs(paddle.getVelocityX() * 0.75))
+					newVelocity = paddle.getVelocityX() / 2 * (newVelocity < 0 ? -1 : 1);
+				ball.setVelX(newVelocity);
+			}
+			else if (paddle.getMoveDirection() == CollisionObject.Direction.RIGHT) {
+				double newVelocity = ball.getVelX() + paddle.getVelocityX() * 0.25;
+				if (Math.abs(newVelocity) > Math.abs(paddle.getVelocityX() * 0.75))
+					newVelocity = paddle.getVelocityX() / 2 * (newVelocity < 0 ? -1 : 1);
+				ball.setVelX(newVelocity);
+			}
 		}
+		
 		paddle.draw(g);
 		
 		ball.updatePosition(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -109,9 +122,9 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 				String imagePath = "";
 				int health = 0;
 				switch (format[x][a]) {
-					case "r": imagePath = "/imgs/redBrick.png"; health = 1; break;
-					case "g": imagePath = "/imgs/greenBrick.png"; health = 1; break;
-					case "y": imagePath = "/imgs/yellowBrick.png"; health = 1; break;
+					case "r": imagePath = "/imgs/redBrick.png"; health = 3; break;
+					case "g": imagePath = "/imgs/greenBrick.png"; health = 3; break;
+					case "y": imagePath = "/imgs/yellowBrick.png"; health = 3; break;
 				}
 				int posX = startX + a * BRICK_WIDTH;
 				int posY = startY + x * BRICK_HEIGHT;
@@ -160,9 +173,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
-		
-		
+
 		
 		int keyCode = arg0.getKeyCode();
 

@@ -33,7 +33,6 @@ public class Brick extends CollisionObject {
 	
 	public boolean isDestroyed() {
 		this.health -= 1;
-		System.out.println(health);
 		if (this.health > 0) 
 			return false;
 		return true;
