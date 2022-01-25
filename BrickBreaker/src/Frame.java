@@ -19,19 +19,24 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	
 	final int SCREEN_WIDTH = 500;
 	final int SCREEN_HEIGHT = 800;
+	final int HEADER_HEIGHT = 75;
 
 	final int BRICK_WIDTH = 46;
 	final int BRICK_HEIGHT = 24;
 	
+	Game game = new Game(3, "imgs/heart.png");
+	
 	ArrayList<Brick> bricks = new ArrayList<Brick>();
 
-	Ball ball = new Ball("imgs/ball.png", 250, 550, 18, 7);
-	Paddle paddle = new Paddle("imgs/paddle.png", SCREEN_WIDTH / 2 - 52, 600, 94, 22, 8);
+	Ball ball = new Ball("imgs/ball.png", 250, 500, 18, 7);
+	Paddle paddle = new Paddle("imgs/paddle.png", SCREEN_WIDTH / 2 - 52, 650, 94, 22, 8);
+	
 	
 	public void paint(Graphics g) {
 		super.paintComponent(g);
 		g.setColor(new Color(41, 46, 55));
 		g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+		game.drawHeader(g, SCREEN_WIDTH, HEADER_HEIGHT);
 		
 		boolean hit = false;
 		
@@ -65,26 +70,34 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		paddle.updatePosition(SCREEN_WIDTH, SCREEN_HEIGHT);
 		if (paddle.checkCollision(ball) != CollisionObject.Side.NONE) {
 			ball.flipVelY();
-
-			System.out.println(ball.getVelX());
-			if (paddle.getMoveDirection() == CollisionObject.Direction.LEFT) {
-				double newVelocity = ball.getVelX() - paddle.getVelocityX() * 0.25;
-				if (Math.abs(newVelocity) > Math.abs(paddle.getVelocityX() * 0.75))
-					newVelocity = paddle.getVelocityX() / 2 * (newVelocity < 0 ? -1 : 1);
-				ball.setVelX(newVelocity);
+			
+			double newVelocity = 3;
+			switch (paddle.getMoveDirection()) {
+			case LEFT:
+				newVelocity = ball.getVelX() - paddle.getVelocityX() * 0.25;
+				break;
+			case RIGHT:
+				newVelocity = ball.getVelX() + paddle.getVelocityX() * 0.25;
+				break;
+			case STOP:
+				newVelocity = ball.getVelX();
+				break;
 			}
-			else if (paddle.getMoveDirection() == CollisionObject.Direction.RIGHT) {
-				double newVelocity = ball.getVelX() + paddle.getVelocityX() * 0.25;
-				if (Math.abs(newVelocity) > Math.abs(paddle.getVelocityX() * 0.75))
-					newVelocity = paddle.getVelocityX() / 2 * (newVelocity < 0 ? -1 : 1);
-				ball.setVelX(newVelocity);
-			}
+			if (Math.abs(newVelocity) > Math.abs(paddle.getVelocityX() * 0.75))
+				newVelocity = paddle.getVelocityX() * 0.75 * (newVelocity < 0 ? -1 : 1);
+			ball.setVelX(newVelocity);
 		}
 		
 		paddle.draw(g);
 		
-		ball.updatePosition(SCREEN_WIDTH, SCREEN_HEIGHT);
+		ball.updatePosition(SCREEN_WIDTH, SCREEN_HEIGHT, HEADER_HEIGHT);
 		ball.draw(g);
+		
+//		if (ball.posY + ball.width > paddle.posY) {
+//			if (game.removeLife() <= 0) {
+////				game.
+//			}
+//		}
 		
 	}
 	
@@ -111,20 +124,19 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	
 	
 	public void buildBrickFormat() {
-		BrickFormats formats = new BrickFormats();
-		String[][] format = formats.getLevelFormat(1);
+		String[][] format = game.getLevelFormat(game.getLevel());
 		
 		for (int x = 0; x < format.length; x++) {
 			int startX = (SCREEN_WIDTH / 2) - ((format[x].length * BRICK_WIDTH) / 2);
 			int startY = ((SCREEN_HEIGHT / 3) - ((format.length * BRICK_HEIGHT) / 2));
-			
+									
 			for (int a = 0; a < format[x].length; a++) {
 				String imagePath = "";
 				int health = 0;
 				switch (format[x][a]) {
-					case "r": imagePath = "/imgs/redBrick.png"; health = 3; break;
-					case "g": imagePath = "/imgs/greenBrick.png"; health = 3; break;
-					case "y": imagePath = "/imgs/yellowBrick.png"; health = 3; break;
+					case "r": imagePath = "/imgs/redBrick.png"; health = game.redBrickHealth; break;
+					case "g": imagePath = "/imgs/greenBrick.png"; health = game.greenBrickHealth; break;
+					case "y": imagePath = "/imgs/yellowBrick.png"; health = game.yellowBrickHealth; break;
 				}
 				int posX = startX + a * BRICK_WIDTH;
 				int posY = startY + x * BRICK_HEIGHT;

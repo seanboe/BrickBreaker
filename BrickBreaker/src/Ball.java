@@ -16,15 +16,15 @@ public class Ball extends CollisionObject {
 		super(posX, posY, width, width);
 		this.image = getImage(img);
 		
-		this.velocityY = -speed;
+		this.velocityY = speed;
 //		this.velocityX = speed * (Math.random() > 0.5 ? -1 : 1);
 		this.velocityX = 0;
 				
 	}
 	
-	public void updatePosition(int frameWidth, int frameHeight) {
+	public void updatePosition(int frameWidth, int frameHeight, int headerHeight) {
 		
-		switch (checkWallCollision(frameWidth, frameHeight)) {
+		switch (checkWallCollision(frameWidth, frameHeight, headerHeight)) {
 			case TOP: velocityY = Math.abs(velocityY); break;
 			case BOTTOM: velocityY = Math.abs(velocityY) * -1; break;
 			case RIGHT: velocityX = Math.abs(velocityX) * -1; break;
@@ -36,7 +36,7 @@ public class Ball extends CollisionObject {
 		posY += velocityY;
 	}
 	
-	private Side checkWallCollision(int frameWidth, int frameHeight) {
+	private Side checkWallCollision(int frameWidth, int frameHeight, int headerHeight) {
 		// right wall collision
 		if (posX + width >= frameWidth)
 			return Side.RIGHT; 
@@ -46,7 +46,7 @@ public class Ball extends CollisionObject {
 			return Side.LEFT;
 
 		// ceiling collision
-		else if (posY <= 0)
+		else if (posY <= headerHeight)
 			return Side.TOP;
 
 		// floor collision
