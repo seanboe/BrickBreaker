@@ -1,20 +1,28 @@
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
 import java.awt.geom.AffineTransform;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+
 public class Game {
 	
 	final int redBrickHealth = 1;
-	final int greenBrickHealth = 1;
-	final int yellowBrickHealth = 2;
-
-
+	final int greenBrickHealth = 2;
+	final int yellowBrickHealth = 3;
+	
+	final int redBrickPoints = 100;
+	final int greenBrickPoints = 150;
+	final int yellowBrickPoints = 250;
+	
 // Level Formats
+
 	private String[][] level1Format = new String[][] {
 		{"r", "r", "r", "r", "r", "r"},
 		{"r", "g", "g", "g", "g", "r"},
@@ -23,21 +31,49 @@ public class Game {
 		{"r", "r", "r", "r", "r", "r"}
 	};
 	
+	private String[][] level2Format = new String[][] {
+		{"r", "r", "r", "r", "r"},
+		{"r", "g", "y", "g", "r"},
+		{"r", "g", "y", "g", "r"},
+		{"r", "g", "y", "g", "r"},
+		{"r", "g", "y", "g", "r"},
+		{"r", "g", "y", "g", "r"},
+		{"r", "g", "y", "g", "r"},
+		{"r", "g", "y", "g", "r"},
+		{"r", "g", "y", "g", "r"},
+		{"r", "g", "y", "g", "r"},
+		{"r", "r", "r", "r", "r"}
+	};
+	
+	private String[][] level3Format = new String[][] {
+		{"r", "r", "r", "r", "r", "r", "r", "r", "r"},
+		{"g", "y", "g", "y", "g", "y", "g", "y", "g"},
+		{"y", "g", "y", "g", "y", "g", "y", "g", "y"},
+		{"g", "y", "g", "y", "g", "y", "g", "y", "g"},
+		{"r", "r", "r", "r", "r", "r", "r", "r", "r"}
+	};
+	
+//	private String[]
+	
 	private int lives;
 	private String heartPath;
 	private int level;
 	private boolean displayingLevelScreen;
+	private int points; 
 	
 	public Game(int lives, String heartPath) {
 		this.lives = lives;
 		this.heartPath = heartPath;
 		this.level = 1;
 		this.displayingLevelScreen = false;
+		this.points = 0;
 	}
 	
 	public String[][] getLevelFormat(int level) {
 		switch (level) {
 			case 1: return level1Format;
+			case 2: return level2Format;
+			case 3: return level3Format;
 		}
 		return level1Format;
 	}
@@ -53,6 +89,13 @@ public class Game {
 			heart.draw(g);
 		}
 		
+		g.setColor(Color.white);
+		Font font = new Font("Monospaced", Font.PLAIN, 20);
+		g.setFont(font);
+		g.drawString(this.points + "", screenWidth / 2, headerHeight / 2);
+	
+		g.drawString(this.level + "", screenWidth - 100, headerHeight / 2);
+		
 	}
 	
 	public int removeLife() {
@@ -60,28 +103,29 @@ public class Game {
 		return this.lives;
 	}
 
-//	public int endGame() {
-//		
-//	}
-	
-	public boolean checkLevelEnd(ArrayList<Brick> bricks) {
-		if (bricks.size() <= 0) {
-			this.level++;
-			return true;
-		}
-		return false;
+	public void increaseLevel() {
+		this.level++;
 	}
 	
 	public int getLevel() {
 		return this.level;
 	}
 	
-	public int lowerLevel() {
-		this.level--;
-		return this.level;
+	public int getLives() {
+		return this.lives;
 	}
 	
-	public void resetGame() {}
+	public void end(JFrame frame, Graphics g, int screenWidth, int screenHeight) {
+		g.setColor(Color.white);
+		Font font = new Font("Monospacedd", Font.PLAIN, 50);
+		g.setFont(font);
+		
+		g.drawString("Game Over!", screenWidth / 2 - 100, screenHeight / 2);
+		
+		frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+		
+		System.out.println("Game Over!");
+	}
 	
 //	public void updateLevelStatus(Graphics g, int screen_width, int screen_height) {
 //	
@@ -116,5 +160,16 @@ public class Game {
 			e.printStackTrace();
 		}
 	}
+	
+	public void addPoints(Brick.BrickColor brickColor) {
+		int newPoints = 0;
+		switch (brickColor) {
+		case RED: newPoints = redBrickPoints; break;
+		case GREEN: newPoints = greenBrickPoints; break;
+		case YELLOW: newPoints = yellowBrickPoints; break;
+		}
+				
+		this.points += newPoints;
+		}
 		
 }

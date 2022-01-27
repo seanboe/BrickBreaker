@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class Frame extends JPanel implements ActionListener, MouseListener, KeyListener {
+	JFrame f;
 	
 	final int SCREEN_WIDTH = 500;
 	final int SCREEN_HEIGHT = 800;
@@ -28,7 +29,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	
 	ArrayList<Brick> bricks = new ArrayList<Brick>();
 
-	Ball ball = new Ball("imgs/ball.png", 250, 500, 18, 7);
+	Ball ball = new Ball("imgs/ball.png", 250, 500, 18, 2, 7);
 	Paddle paddle = new Paddle("imgs/paddle.png", (SCREEN_WIDTH / 2) - (52 / 2), 650, 94, 22, 8);
 	
 	
@@ -45,19 +46,31 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			switch (brick.checkCollision(ball)) {
 				case RIGHT: 
 					ball.flipVelX();
-					if (brick.isDestroyed()) bricks.remove(x);
+					if (brick.isDestroyed()) {
+						game.addPoints(brick.getColor());
+						bricks.remove(x);
+					}
 					break;
 				case LEFT:
 					ball.flipVelX();
-					if (brick.isDestroyed()) bricks.remove(x);				
+					if (brick.isDestroyed()) {
+						game.addPoints(brick.getColor());
+						bricks.remove(x);				
+					}
 					break;
 				case BOTTOM: 
 					ball.flipVelY();
-					if (brick.isDestroyed()) bricks.remove(x);					
+					if (brick.isDestroyed()) {
+						game.addPoints(brick.getColor());
+						bricks.remove(x);					
+					}
 					break;
 				case TOP: 
 					ball.flipVelY();
-					if (brick.isDestroyed()) bricks.remove(x);					
+					if (brick.isDestroyed()) {
+						game.addPoints(brick.getColor());
+						bricks.remove(x);					
+					}
 					break;
 				default: break;
 			}
@@ -69,38 +82,50 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		
 		paddle.updatePosition(SCREEN_WIDTH, SCREEN_HEIGHT);
 		if (paddle.checkCollision(ball) != CollisionObject.Side.NONE) {
+			ball.setToNominalSpeed();
 			ball.flipVelY();
 			
-			double newVelocity = 3;
+			double newVelocity = 0;
 			switch (paddle.getMoveDirection()) {
 			case LEFT:
-				newVelocity = ball.getVelX() - paddle.getVelocityX() * 0.25;
+				newVelocity = ball.getVelX() - Math.abs(paddle.getVelocityX()) * 0.25;
 				break;
 			case RIGHT:
-				newVelocity = ball.getVelX() + paddle.getVelocityX() * 0.25;
+				newVelocity = ball.getVelX() + Math.abs(paddle.getVelocityX()) * 0.25;
 				break;
 			case STOP:
 				newVelocity = ball.getVelX();
 				break;
 			}
+			
 			if (Math.abs(newVelocity) > Math.abs(paddle.getVelocityX() * 0.75))
-				newVelocity = paddle.getVelocityX() * 0.75 * (newVelocity < 0 ? -1 : 1);
+				newVelocity = paddle.getVelocityX() * 0.75 * (newVelocity < ball.getVelX() ? -1 : 1);
 			ball.setVelX(newVelocity);
 		}
 		
 		paddle.draw(g);
 		
-		ball.updatePosition(SCREEN_WIDTH, SCREEN_HEIGHT, HEADER_HEIGHT);
-		ball.draw(g);
-		
-		if (ball.posY + ball.height > paddle.posY + paddle.height) {
+		if (ball.updatePosition(SCREEN_WIDTH, SCREEN_HEIGHT, HEADER_HEIGHT)) {
 			ball.reset();
 			if (game.removeLife() <= 0) {
-				game.lowerLevel();
 			}
-			
 		}
+		ball.draw(g);
 		
+		// Check whether to update the level
+		if (bricks.size() == 0) {
+			if (ball.posY <= HEADER_HEIGHT) {
+				game.increaseLevel();
+				bricks.clear();
+				buildBrickFormat();
+				ball.posY = paddle.posY - 10;
+			}
+		}		
+		
+		// check for game end
+		if (game.getLives() <= 0) {
+			game.end(f, g, SCREEN_WIDTH, SCREEN_HEIGHT);
+		}
 	}
 	
 	public static void main(String[] arg) {
@@ -108,7 +133,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	}
 	
 	public Frame() {
-		JFrame f = new JFrame("BrickBreaker");
+		f = new JFrame("BrickBreaker");
 		f.setSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
 		f.setBackground(Color.blue);
 		f.add(this);
@@ -124,7 +149,6 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 
 	}
 	
-	
 	public void buildBrickFormat() {
 		String[][] format = game.getLevelFormat(game.getLevel());
 		
@@ -135,19 +159,22 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			for (int a = 0; a < format[x].length; a++) {
 				String imagePath = "";
 				int health = 0;
+				Brick.BrickColor brickColor = Brick.BrickColor.RED;
 				switch (format[x][a]) {
-					case "r": imagePath = "/imgs/redBrick.png"; health = game.redBrickHealth; break;
-					case "g": imagePath = "/imgs/greenBrick.png"; health = game.greenBrickHealth; break;
-					case "y": imagePath = "/imgs/yellowBrick.png"; health = game.yellowBrickHealth; break;
+					case "r": imagePath = "/imgs/redBrick.png"; health = game.redBrickHealth; brickColor = Brick.BrickColor.RED; break;
+					case "g": imagePath = "/imgs/greenBrick.png"; health = game.greenBrickHealth; brickColor = Brick.BrickColor.GREEN; break;
+					case "y": imagePath = "/imgs/yellowBrick.png"; health = game.yellowBrickHealth; brickColor = Brick.BrickColor.YELLOW; break;
+					default: health = 0; brickColor = Brick.BrickColor.CLEAR;
 				}
 				int posX = startX + a * BRICK_WIDTH;
 				int posY = startY + x * BRICK_HEIGHT;
 				
-				bricks.add(new Brick(imagePath, posX, posY, BRICK_WIDTH, BRICK_HEIGHT, health));
+				bricks.add(new Brick(imagePath, posX, posY, BRICK_WIDTH, BRICK_HEIGHT, health, brickColor));
 			}
 		}
+		
 	}
-	
+		
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub

@@ -35,11 +35,13 @@ public class Ball extends CollisionObject {
 		this.speedNominal = speedNominal;
 	}
 	
-	public void updatePosition(int frameWidth, int frameHeight, int headerHeight) {
+	public boolean updatePosition(int frameWidth, int frameHeight, int headerHeight) {
+		
+		boolean bottomCollision = false;
 		
 		switch (checkWallCollision(frameWidth, frameHeight, headerHeight)) {
 			case TOP: velocityY = Math.abs(velocityY); break;
-			case BOTTOM: velocityY = Math.abs(velocityY) * -1; break;
+			case BOTTOM: velocityY = Math.abs(velocityY) * -1; bottomCollision = true; break;
 			case RIGHT: velocityX = Math.abs(velocityX) * -1; break;
 			case LEFT: velocityX = Math.abs(velocityX); break;
 			case NONE: break;
@@ -47,6 +49,8 @@ public class Ball extends CollisionObject {
 				
 		posX += velocityX;
 		posY += velocityY;
+		
+		return bottomCollision;
 	}
 	
 	private Side checkWallCollision(int frameWidth, int frameHeight, int headerHeight) {
@@ -70,7 +74,8 @@ public class Ball extends CollisionObject {
 	}
 		
 	public void setVelX(double paddleVelX) {
-		velocityX = (paddleVelX) * (paddleVelX < 0 ? -1 : 1);
+//		velocityX = (paddleVelX) * (paddleVelX < 0 ? -1 : 1);
+		velocityX = paddleVelX;
 	}
 	
 	public double getVelX() {

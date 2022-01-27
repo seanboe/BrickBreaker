@@ -14,14 +14,24 @@ public class Brick extends CollisionObject {
 	
 	private Image image;
 	private int health;
+
+	enum BrickColor{
+		RED, GREEN, YELLOW, CLEAR
+	}
 	
-	public Brick(String img, int posX, int posY, int width, int height, int health) {
+	BrickColor brickColor;
+	
+	public Brick(String img, int posX, int posY, int width, int height, int health, BrickColor brickColor) {
 		super(posX, posY, width, height);
 		this.image = getImage(img);
 		this.health = health;
+		this.brickColor = brickColor;
 	}
 	
 	public void draw(Graphics g) {
+		
+		if (brickColor == BrickColor.CLEAR)
+			return;
 		
 		AffineTransform tx = AffineTransform.getTranslateInstance(0, 0);
 		tx.setToTranslation(posX, posY);
@@ -51,6 +61,10 @@ public class Brick extends CollisionObject {
 	
 	public void setColor(Color color) {
 //		this.color = color;
+	}
+	
+	public BrickColor getColor() {
+		return this.brickColor;
 	}
 
 }
