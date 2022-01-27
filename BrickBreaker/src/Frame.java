@@ -19,7 +19,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	
 	final int SCREEN_WIDTH = 500;
 	final int SCREEN_HEIGHT = 800;
-	final int HEADER_HEIGHT = 75;
+	final int HEADER_HEIGHT = 50;
 
 	final int BRICK_WIDTH = 46;
 	final int BRICK_HEIGHT = 24;
@@ -29,7 +29,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	ArrayList<Brick> bricks = new ArrayList<Brick>();
 
 	Ball ball = new Ball("imgs/ball.png", 250, 500, 18, 7);
-	Paddle paddle = new Paddle("imgs/paddle.png", SCREEN_WIDTH / 2 - 52, 650, 94, 22, 8);
+	Paddle paddle = new Paddle("imgs/paddle.png", (SCREEN_WIDTH / 2) - (52 / 2), 650, 94, 22, 8);
 	
 	
 	public void paint(Graphics g) {
@@ -93,11 +93,13 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		ball.updatePosition(SCREEN_WIDTH, SCREEN_HEIGHT, HEADER_HEIGHT);
 		ball.draw(g);
 		
-//		if (ball.posY + ball.width > paddle.posY) {
-//			if (game.removeLife() <= 0) {
-////				game.
-//			}
-//		}
+		if (ball.posY + ball.height > paddle.posY + paddle.height) {
+			ball.reset();
+			if (game.removeLife() <= 0) {
+				game.lowerLevel();
+			}
+			
+		}
 		
 	}
 	

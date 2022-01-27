@@ -11,15 +11,28 @@ public class Ball extends CollisionObject {
 	private double velocityY;
 	private double velocityX;
 	private Image image;
+	private boolean collidedPaddleOnce;
+	
+	// reset stuff
+	private double speedInitial;
+	private double speedNominal;
+	private int startX;
+	private int startY;
 		
-	public Ball(String img, int posX, int posY, int width, double speed) {
+	public Ball(String img, int posX, int posY, int width, double speedInitial, double speedNominal) {
 		super(posX, posY, width, width);
 		this.image = getImage(img);
 		
-		this.velocityY = speed;
+		this.velocityY = speedInitial;
 //		this.velocityX = speed * (Math.random() > 0.5 ? -1 : 1);
 		this.velocityX = 0;
-				
+		collidedPaddleOnce = false;
+		
+		
+		this.startX = posX;
+		this.startY = posY;
+		this.speedInitial = speedInitial;
+		this.speedNominal = speedNominal;
 	}
 	
 	public void updatePosition(int frameWidth, int frameHeight, int headerHeight) {
@@ -62,6 +75,18 @@ public class Ball extends CollisionObject {
 	
 	public double getVelX() {
 		return velocityX;
+	}
+	
+	public void reset() {
+		this.posX = this.startX;
+		this.posY = this.startY;
+		this.velocityY = this.speedInitial;
+		this.velocityX = 0;
+		this.collidedPaddleOnce = false;
+	}
+	
+	public void setToNominalSpeed() {
+		this.velocityY = this.speedNominal;
 	}
 	
 	public void draw(Graphics g) {

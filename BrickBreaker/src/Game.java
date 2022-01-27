@@ -26,11 +26,13 @@ public class Game {
 	private int lives;
 	private String heartPath;
 	private int level;
+	private boolean displayingLevelScreen;
 	
 	public Game(int lives, String heartPath) {
 		this.lives = lives;
 		this.heartPath = heartPath;
-		level = 1;
+		this.level = 1;
+		this.displayingLevelScreen = false;
 	}
 	
 	public String[][] getLevelFormat(int level) {
@@ -45,23 +47,10 @@ public class Game {
 		g.fillRect(0, 0, screenWidth, headerHeight);
 		
 		// Draw the hearts
-		int heartSpacing = 50;
+		int heartSpacing = 35;
 		for (int x = heartSpacing / 2; x <= (this.lives) * heartSpacing; x+= heartSpacing) {
-			
-			Image heartImage = null;
-			try {
-				URL imageURL = Duck.class.getResource(this.heartPath);
-				heartImage = Toolkit.getDefaultToolkit().getImage(imageURL);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			AffineTransform tx = AffineTransform.getTranslateInstance(0, 0);
-			tx.setToTranslation(x, (headerHeight - heartSpacing) / 2);
-			tx.scale(.07, .07);
-			Graphics2D g2 = (Graphics2D) g;
-			g2.drawImage(heartImage, tx, null);
-			
+			Picture heart = new Picture("imgs/heart.png", 0.01, 0.01, x, (headerHeight - heartSpacing) / 2);
+			heart.draw(g);
 		}
 		
 	}
@@ -85,6 +74,47 @@ public class Game {
 	
 	public int getLevel() {
 		return this.level;
+	}
+	
+	public int lowerLevel() {
+		this.level--;
+		return this.level;
+	}
+	
+	public void resetGame() {}
+	
+//	public void updateLevelStatus(Graphics g, int screen_width, int screen_height) {
+//	
+//		int heartSpacing = 35;
+//		
+//		Picture screen = new Picture("imgs/black_screen.png", 1.25, 2, 0, 0);
+//		screen.draw(g);
+//		
+//		System.out.println("123");
+//		
+//		for (int x = 0; x < 5; x++) {
+//			for (int a = (screen_width / 2) - ((lives * heartSpacing) / 2); a < this.lives; a+= heartSpacing) {
+//								
+////				Picture heart = new Picture("imgs/heart.png", 0.01, 0.01, a, (screen_height / 2) + x * heartSpacing);
+//				Picture heart = new Picture("imgs/heart.png", 0.01, 0.01, 0, 0);
+//				heart.draw(g);
+//				System.out.println("Here");
+//			}	
+//			pause(300);
+//			
+//			if (x == 3)
+//				this.lives--;
+//		}
+//				
+//	}
+	
+	public void pause(long millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 		
 }
