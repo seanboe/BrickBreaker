@@ -5,7 +5,7 @@ uses object-oriented programming and inheritance, with most classes extending th
 
 ## Gameplay
 
-![gamplay](images/gameplay.gif)
+![gamplay](images/gamePlay.gif)
 (The gif is actually slightly too slow, and the game is usually faster)
 
 The Paddle can move left and right, and the ball bounces around the frame. The aim of the game is to break all of
@@ -21,8 +21,6 @@ the game screen). If you drop to 0 lives, the game ends.
 
 Also, you can aim the ball slightly by moving your paddle in the direction that you want it to go (when they collide). This is
 a particularly useful feature, and it makes the game actually fun to play (instead of highly irritating).
-
-![level one](images/levelone.png)
 
 ## Levels
 
