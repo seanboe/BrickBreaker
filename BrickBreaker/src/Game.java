@@ -30,6 +30,7 @@ public class Game {
 		{"r", "g", "g", "g", "g", "r"},
 		{"r", "r", "r", "r", "r", "r"}
 	};
+
 	
 	private String[][] level2Format = new String[][] {
 		{"r", "r", "r", "r", "r"},
