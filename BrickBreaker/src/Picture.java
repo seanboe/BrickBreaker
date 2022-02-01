@@ -21,6 +21,11 @@ public class Picture {
 		this.posY = posY;
 	}
 	
+	public void updatePosition(int newX, int newY) {
+		this.posX = newX;
+		this.posY = newY;
+	}
+	
 	private Image getImage(String path) {
 		Image tempImage = null;
 		try {

@@ -103,6 +103,10 @@ public class Game {
 		this.lives--;
 		return this.lives;
 	}
+	
+	public void addLife() {
+		this.lives++;
+	}
 
 	public void increaseLevel() {
 		this.level++;
@@ -127,31 +131,6 @@ public class Game {
 		
 		System.out.println("Game Over!");
 	}
-	
-//	public void updateLevelStatus(Graphics g, int screen_width, int screen_height) {
-//	
-//		int heartSpacing = 35;
-//		
-//		Picture screen = new Picture("imgs/black_screen.png", 1.25, 2, 0, 0);
-//		screen.draw(g);
-//		
-//		System.out.println("123");
-//		
-//		for (int x = 0; x < 5; x++) {
-//			for (int a = (screen_width / 2) - ((lives * heartSpacing) / 2); a < this.lives; a+= heartSpacing) {
-//								
-////				Picture heart = new Picture("imgs/heart.png", 0.01, 0.01, a, (screen_height / 2) + x * heartSpacing);
-//				Picture heart = new Picture("imgs/heart.png", 0.01, 0.01, 0, 0);
-//				heart.draw(g);
-//				System.out.println("Here");
-//			}	
-//			pause(300);
-//			
-//			if (x == 3)
-//				this.lives--;
-//		}
-//				
-//	}
 	
 	public void pause(long millis) {
 		try {

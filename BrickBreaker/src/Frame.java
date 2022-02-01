@@ -116,6 +116,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		if (bricks.size() == 0) {
 			if (ball.posY <= HEADER_HEIGHT) {
 				game.increaseLevel();
+				game.addLife();
 				bricks.clear();
 				buildBrickFormat();
 				ball.posY = paddle.posY - 10;
